@@ -35,6 +35,7 @@ use: &use
   type: select
   use: 
     - {{SUB_NAME}}
+    # - 本地配置
 
 # 订阅链接
 # 对于订阅来说，path 为选填项，但建议启用
@@ -137,36 +138,48 @@ dns:
   ipv6: false
   use-hosts: true
   respect-rules: true
-  # 路由器个人建议使用 redir-host 以最佳兼容性
-  # 其他设备可以使用 fake-ip
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
-    - '*'
-    - '+.lan'
+    - 'geosite:cn'
     - '+.local'
-  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
-  nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
-  proxy-server-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
-  fallback: [1.1.1.1, 8.8.8.8]
+
+  # 当 nameserver 或 nameserver-policy 没有匹配到特定域名时，或者配置中没有 fallback 时，会使用 default-nameserver 来解析
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.114.114
+
+  # 默认使用国内 DNS（加速国内访问）
+  nameserver:
+    - 'https://dns.alidns.com/dns-query'
+    - 'https://doh.pub/dns-query'
+
+  # 回退 DNS（当主上游失败时使用国际可用 DoH/DoT）
+  fallback:
+    - 'tls://1.1.1.1:853'
+    - 'tls://8.8.8.8:853'
+    - 'https://doh.pub/dns-query'
+
+  # 特殊域名走专用解析策略
   nameserver-policy:
-    # 为特定域名／集合指定专用解析服务器
-    'geosite:cn':
-      - 223.5.5.5
-      - 119.29.29.29
-      - 114.114.114.114
-    'geosite:gfw':
-      - 1.1.1.1
-      - 8.8.8.8
+    'geosite:cn':  # 国内网站优先国内 DNS
+      - 'https://dns.alidns.com/dns-query'
+      - 'https://doh.pub/dns-query'
+    'geosite:gfw':  # 被墙网站走国际 DNS
+      - 'tls://dns.google'
+      - 'tls://cloudflare-dns.com'
     '+.google.com':
-      - 1.1.1.1
-      - 8.8.8.8
+      - 'tls://dns.google'
     '+.facebook.com':
-      - 1.1.1.1
-      - 8.8.8.8
+      - 'tls://dns.google'
     '+.youtube.com':
-      - 1.1.1.1
-      - 8.8.8.8
+      - 'tls://dns.google'
+
+  # 当 DNS 请求通过代理链发出时使用的上游
+  proxy-server-nameserver:
+    - 'tls://dns.google'
+    - 'https://doh.pub/dns-query'
 
 # 多入站端口设置
 # listeners:
