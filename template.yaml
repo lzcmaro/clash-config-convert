@@ -1,0 +1,360 @@
+# AFF
+# 如果你想支持我，可以通过我的邀请链接购买机场
+# 感谢支持
+# 1. 倾城极速 邀请码: 0jiB5uAA https://qcjs.ovh/#/register?code=0jiB5uAA
+# 2. ssLinks 邀请码: fSo2OhzH https://98a6251b6cd7471da86cca993b6dbe6f.36d.biz/#/register?code=fSo2OhzH
+
+# 一定要填我的邀请码，不填我哭给你看😭
+
+# mihomo (Clash Meta) 懒人配置
+# 版本 V1.22-250718
+# https://gist.github.com/liuran001/5ca84f7def53c70b554d3f765ff86a33
+# https://obdo.cc/meta
+# 作者: 笨蛋ovo (bdovo.cc)
+# Telegram: https://t.me/baka_not_baka
+# 关注我的 Telegram 频道谢谢喵 https://t.me/s/BDovo_Channel
+# 修改自官方示例规则 https://wiki.metacubex.one/example/#meta
+# 转载请保留此注释
+# 尽量添加了较为详尽的注释，不理解的地方建议对照 虚空终端 (Clash Meta) Docs 进行理解
+# 虚空终端 (Clash Meta) Docs 地址: https://wiki.metacubex.one
+# 不理解的地方不要乱动，如果你是小白，请按下 `Ctrl + F` 搜索 `基础配置`，只修改此部分
+
+# true 是启用
+# false 是禁用
+
+
+# 延迟检测 URL
+p: &p
+  type: http
+  # 自动更新订阅时间，单位为秒
+  interval: 86400
+  # 订阅节点可用性检查
+  health-check:
+    enable: true
+    url: https://cp.cloudflare.com
+    # 节点连通性检测时间，单位为秒
+    interval: 1800
+    # 节点超时延迟，单位为毫秒
+    timeout: 2000
+    # 节点自动切换差值，单位为毫秒
+    tolerance: 300
+
+# 基础配置
+# --------------------------------------------------
+# 如果你是小白，那么你只需要修改分割线以内的内容
+# 其他部分保持不动即可
+
+# 也可以把分割线以内的内容粘贴到您使用代理工具的「覆写」功能，然后在覆写中进行修改
+# 使用覆写时可以直接将此配置文件作为订阅链接进行订阅
+# https://gist.githubusercontent.com/liuran001/5ca84f7def53c70b554d3f765ff86a33/raw/config.yaml
+
+# 如果你需要使用大于两个机场，在下方 `use` 处添加 `订阅三` （名字可以自己取），然后在 `proxy-providers` 照例添加订阅链接即可
+# 反之，如果你只需要使用一个，那么将 `订阅二` 前添加 `#` 进行注释即可
+
+# 订阅名，记得修改成自己的
+# 添删订阅在这里和下方订阅链接依葫芦画瓢就行
+use: &use
+  type: select
+  use: 
+    - 良心云
+
+# 订阅链接
+# 对于订阅来说，path 为选填项，但建议启用
+# 本地配置可以只填 path
+proxy-providers:
+  良心云:
+    <<: *p
+    # path: ./proxy_provider/订阅一.yaml
+    url: "{{SUB_URL}}"
+    # 如需要为该订阅组节点添加前缀，取消下面两行注释
+    # override:
+      # additional-prefix: "[订阅一]"
+
+  # 本地配置:
+    # <<: *p
+    # path: ./proxy_provider/本地配置.yaml
+    # 如需要为该订阅组节点添加前缀，取消下面两行注释
+    # override:
+      # additional-prefix: "[本地配置]"
+
+# 小白请不要继续随意修改以下设置
+# 若需修改请参阅文档 https://wiki.metacubex.one
+# --------------------------------------------------
+
+# 规则订阅
+rule-providers:
+  # 秋风广告拦截规则
+  AWAvenue-Ads:
+    type: http
+    # domain 纯域名格式 | classical 经典型模式，包含 DOMAIN-SUFFIX 等，主要看该规则集返回的数据格式
+    behavior: domain
+    format: yaml
+    # path可为空(仅限clash.meta 1.15.0以上版本)
+    path: ./rule_provider/AWAvenue-Ads.yaml
+    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.yaml"
+    # 更新周期：86400 秒（24小时）
+    interval: 86400
+
+mode: rule
+# ipv6 支持
+ipv6: true
+log-level: info
+# 允许局域网连接
+allow-lan: true
+# socks5/http 端口
+mixed-port: 7890
+# Meta 内核特性 https://wiki.metacubex.one/config/general
+# 统一延迟
+# 更换延迟计算方式,去除握手等额外延迟
+unified-delay: true
+# TCP 并发
+# 同时对所有ip进行连接，返回延迟最低的地址
+tcp-concurrent: true
+# 外部控制端口
+external-controller: :9090
+
+geodata-mode: true
+
+# Geo 数据库下载地址
+# 源地址 https://github.com/MetaCubeX/meta-rules-dat
+# 可以更换镜像站但不要更换其他数据库，可能导致无法启动
+geox-url:
+  geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat"
+  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb"
+  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
+
+# 进程匹配模式
+# 路由器上请设置为 off
+# always 开启，强制匹配所有进程
+# strict 默认，由 Clash 判断是否开启
+# off 不匹配进程，推荐在路由器上使用此模式
+find-process-mode: strict
+
+# 缓解移动设备耗电问题
+# https://github.com/vernesong/OpenClash/issues/2614
+keep-alive-interval: 1800
+
+# 全局客户端指纹
+global-client-fingerprint: random # 随机指纹
+
+# 缓存
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# tun 模式
+tun:
+  enable: false  # enable 'true'
+  stack: system  # or 'gvisor'
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-detect-interface: true
+
+# dns 设置
+dns:
+  enable: true
+  ipv6: false
+  use-hosts: true
+  respect-rules: true
+  # 路由器个人建议使用 redir-host 以最佳兼容性
+  # 其他设备可以使用 fake-ip
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*'
+    - '+.lan'
+    - '+.local'
+  default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+  nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+  proxy-server-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+  fallback: [1.1.1.1, 8.8.8.8]
+  nameserver-policy:
+    # 为特定域名／集合指定专用解析服务器
+    'geosite:cn':
+      - 223.5.5.5
+      - 119.29.29.29
+      - 114.114.114.114
+    'geosite:gfw':
+      - 1.1.1.1
+      - 8.8.8.8
+    '+.google.com':
+      - 1.1.1.1
+      - 8.8.8.8
+    '+.facebook.com':
+      - 1.1.1.1
+      - 8.8.8.8
+    '+.youtube.com':
+      - 1.1.1.1
+      - 8.8.8.8
+
+# 多入站端口设置
+# listeners:
+#   - name: hk
+#     type: mixed
+#     port: 12991
+#     proxy: 香港
+
+#   - name: tw
+#     type: mixed
+#     port: 12992
+#     proxy: 台湾
+
+#   - name: sg
+#     type: mixed
+#     port: 12993
+#     proxy: 新加坡
+
+proxies:
+  # - name: "WARP"
+  #   type: wireguard
+  #   server: engage.cloudflareclient.com
+  #   port: 2408
+  #   ip: "172.16.0.2/32"
+  #   ipv6: "2606::1/128"        # 自行替换
+  #   private-key: "private-key" # 自行替换
+  #   public-key: "public-key"   # 自行替换
+  #   udp: true
+  #   reserved: "abba"           # 自行替换
+  #   mtu: 1280
+  #   dialer-proxy: "WARP前置"
+  #   remote-dns-resolve: true
+  #   dns:
+  #     - https://dns.cloudflare.com/dns-query
+
+proxy-groups:
+  - name: Proxies
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/clasha.png
+    proxies:
+      - 自动选择
+      - 故障转移
+    <<: *use
+  
+  - name: YouTube
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/refs/heads/master/Social_Media/YouTube.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Netflix
+    hidden: true
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Netflix.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Telegram
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Telegram.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Google
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Google.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Microsoft
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/microsoft.png
+    proxies:
+      - DIRECT
+      - Proxies
+    <<: *use
+
+  - name: OpenAI
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/chatgpt.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Apple
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Apple.png
+    proxies:
+      - DIRECT
+      - Proxies
+    <<: *use
+
+  - name: Binance
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/binance.png
+    proxies:
+      - DIRECT
+      - Proxies
+    <<: *use
+
+  - name: Github
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Openhub.png
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Final
+    type: select
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Golbal.png
+    proxies:
+      - Proxies
+      - DIRECT
+    # Final组是用来兜底的，不需要注入订阅节点，默认指向Proxies组
+
+  - name: 广告
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+      - Proxies
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/refs/heads/master/Universal/Reject.png
+    # 广告组不需要注入订阅节点
+
+  - name: 自动选择
+    <<: *use
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 600
+    timeout: 3000
+    tolerance: 50
+    # 懒惰开关，启用后，代表该策略组被使用时才会去测速
+    lazy: true
+
+  - name: 故障转移
+    <<: *use
+    type: fallback
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 600
+
+rules:
+  - GEOIP,private,DIRECT,no-resolve
+  - IP-CIDR,1.1.1.1/32,Final,no-resolve
+  - IP-CIDR,8.8.8.8/32,Final,no-resolve
+  # 广告拦截
+  - RULE-SET,AWAvenue-Ads,广告
+  # 代理组分流
+  - GEOSITE,apple,Apple
+  - GEOSITE,apple-cn,Apple
+  - GEOSITE,github,Github
+  - GEOSITE,youtube,YouTube
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,microsoft,Microsoft
+  - GEOSITE,openai,OpenAI
+  - GEOSITE,binance,Binance
+  - GEOSITE,google,Google
+  - GEOSITE,google-cn,Google # Google CN 不走代理会导致香港等地区节点 Play Store 异常
+  - GEOIP,google,Google
+  - GEOIP,telegram,Telegram
+  # 本地和国内域名
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,17.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+  - IP-CIDR6,::1/128,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - IP-CIDR6,fd00::/8,DIRECT,no-resolve
+  - DOMAIN-SUFFIX,local,DIRECT
+  - DOMAIN-SUFFIX,cn,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Final
