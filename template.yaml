@@ -34,13 +34,13 @@ p: &p
 use: &use
   type: select
   use: 
-    - 良心云
+    - {{SUB_NAME}}
 
 # 订阅链接
 # 对于订阅来说，path 为选填项，但建议启用
 # 本地配置可以只填 path
 proxy-providers:
-  良心云:
+  {{SUB_NAME}}:
     <<: *p
     # path: ./proxy_provider/订阅一.yaml
     url: "{{SUB_URL}}"
