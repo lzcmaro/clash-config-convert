@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Clash 懒人订阅配置生成</title>
+<style>
+  body { font-family:sans-serif; max-width:600px; margin:50px auto;}
+  input{ width:100%; padding:8px; font-size:16px;}
+  button{ margin-top:10px; padding:8px 12px; font-size:16px;}
+</style>
+</head>
+<body>
+
+<h2>🔧 Clash 懒人配置</h2>
+<p>输入你的订阅链接，我会生成完整的 YAML。</p>
+
+<input id="inputUrl" placeholder="https://example.com/subscription" />
+<button onclick="gen()">生成 YAML</button>
+
+<script>
+async function gen() {
+  const url = document.getElementById("inputUrl").value.trim()
+  if (!url) return alert("请先输入订阅链接")
+
+  // 读取模板
+  const res = await fetch("template.yaml")
+  let yaml = await res.text()
+
+  // 替换占位符
+  yaml = yaml.replace(/{{SUB_URL}}/g, url)
+
+  // 下载
+  const blob = new Blob([yaml], { type: "text/yaml" })
+  const a = document.createElement("a")
+  a.href = URL.createObjectURL(blob)
+  a.download = "config.yaml"
+  a.click()
+}
+</script>
+
+</body>
+</html>
