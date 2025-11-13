@@ -339,19 +339,6 @@ rules:
   # 广告拦截
   - RULE-SET,AWAvenue-Ads,广告
   # 代理组分流
-  - GEOSITE,apple,Apple
-  - GEOSITE,apple-cn,Apple
-  - GEOSITE,github,Github
-  - GEOSITE,youtube,YouTube
-  - GEOSITE,telegram,Telegram
-  - GEOSITE,microsoft,Microsoft
-  - GEOSITE,openai,OpenAI
-  - GEOSITE,binance,Binance
-  - GEOSITE,google,Google
-  - GEOSITE,google-cn,Google # Google CN 不走代理会导致香港等地区节点 Play Store 异常
-  - GEOIP,google,Google
-  - GEOIP,telegram,Telegram
-  # Binance 规则补充
   - 'DOMAIN-SUFFIX,trustwallet.com,Binance'
   - 'DOMAIN-SUFFIX,bnbchain.org,Binance'
   - 'DOMAIN-SUFFIX,bnbchain.dev,Binance'
@@ -364,7 +351,20 @@ rules:
   - 'DOMAIN-SUFFIX,bnappweb.biz,Binance'
   - 'DOMAIN-SUFFIX,bnappcloud.com,Binance'
   - 'DOMAIN-SUFFIX,walletconnect.org,Binance'
-  - 'DOMAIN-KEYWORD,binance,Binance'
+  - 'DOMAIN-SUFFIX,m.api.forter.com,Binance'
+  - 'DOMAIN-SUFFIX,report.bntrace.com,Binance'
+  - GEOSITE,binance,Binance
+  - GEOSITE,apple,Apple
+  - GEOSITE,apple-cn,Apple
+  - GEOSITE,github,Github
+  - GEOSITE,youtube,YouTube
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,microsoft,Microsoft
+  - GEOSITE,openai,OpenAI
+  - GEOSITE,google,Google
+  - GEOSITE,google-cn,Google # Google CN 不走代理会导致香港等地区节点 Play Store 异常
+  - GEOIP,google,Google
+  - GEOIP,telegram,Telegram
   # 本地和国内域名
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
