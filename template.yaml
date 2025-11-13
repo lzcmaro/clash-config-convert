@@ -1,3 +1,4 @@
+# mihomo (Clash Meta) 懒人配置
 # 本配置基于懒人配置（https://gist.github.com/liuran001/5ca84f7def53c70b554d3f765ff86a33）修改
 
 
@@ -142,6 +143,7 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - 'geosite:cn'
+    - '+.lan'
     - '+.local'
 
   # 当 nameserver 或 nameserver-policy 没有匹配到特定域名时，或者配置中没有 fallback 时，会使用 default-nameserver 来解析
@@ -318,6 +320,22 @@ rules:
   - GEOIP,private,DIRECT,no-resolve
   - IP-CIDR,1.1.1.1/32,Final,no-resolve
   - IP-CIDR,8.8.8.8/32,Final,no-resolve
+  # 直连白名单
+  - 'DOMAIN,dns.alidns.com,DIRECT'
+  - 'DOMAIN,doh.pub,DIRECT'
+  - 'DOMAIN,alt1-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt1-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt2-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt3-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt4-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt5-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt6-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt7-mtalk.google.com,DIRECT'
+  - 'DOMAIN,alt8-mtalk.google.com,DIRECT'
+  - 'DOMAIN,mtalk.google.com,DIRECT'
+  - 'DOMAIN,mtalk4.google.com,DIRECT'
+  - 'DOMAIN,mtalk-staging.google.com,DIRECT'
+  - 'DOMAIN,mtalk-dev.google.com,DIRECT'
   # 广告拦截
   - RULE-SET,AWAvenue-Ads,广告
   # 代理组分流
@@ -333,6 +351,20 @@ rules:
   - GEOSITE,google-cn,Google # Google CN 不走代理会导致香港等地区节点 Play Store 异常
   - GEOIP,google,Google
   - GEOIP,telegram,Telegram
+  # Binance 规则补充
+  - 'DOMAIN-SUFFIX,trustwallet.com,Binance'
+  - 'DOMAIN-SUFFIX,bnbchain.org,Binance'
+  - 'DOMAIN-SUFFIX,bnbchain.dev,Binance'
+  - 'DOMAIN-SUFFIX,bnscan.io,Binance'
+  - 'DOMAIN-SUFFIX,bnacademy.org,Binance'
+  - 'DOMAIN-SUFFIX,binancefuture.com,Binance'
+  - 'DOMAIN-SUFFIX,bnappzh.co,Binance'
+  - 'DOMAIN-SUFFIX,bnbzh.ac,Binance'
+  - 'DOMAIN-SUFFIX,saasexch.info,Binance'
+  - 'DOMAIN-SUFFIX,bnappweb.biz,Binance'
+  - 'DOMAIN-SUFFIX,bnappcloud.com,Binance'
+  - 'DOMAIN-SUFFIX,walletconnect.org,Binance'
+  - 'DOMAIN-KEYWORD,binance,Binance'
   # 本地和国内域名
   - IP-CIDR,127.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
