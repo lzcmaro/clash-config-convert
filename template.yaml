@@ -61,6 +61,12 @@ proxy-providers:
 # 若需修改请参阅文档 https://wiki.metacubex.one
 # --------------------------------------------------
 
+#节点过滤
+# --------------------------------------------------
+过滤节点: &GL "跳转|长期|导入|节点|流量|轮询|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|失联|到期|JC|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|页面|提示|特别|访问|支持|教程|关注|更新|作者|加入|.com|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author"
+openai: &OPENAI "香港|🇭🇰|HK|Hong|跳转|长期|导入|节点|流量|轮询|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|失联|到期|JC|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|页面|提示|特别|访问|支持|教程|关注|更新|作者|加入|.com|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author"
+# --------------------------------------------------
+
 # 规则订阅
 rule-providers:
   # 秋风广告拦截规则
@@ -227,6 +233,7 @@ proxy-groups:
   
   - name: YouTube
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/refs/heads/master/Social_Media/YouTube.png
+    exclude-filter: *GL
     proxies:
       - Proxies
     <<: *use
@@ -234,24 +241,28 @@ proxy-groups:
   - name: Netflix
     hidden: true
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Netflix.png
+    exclude-filter: *GL
     proxies:
       - Proxies
     <<: *use
 
   - name: Telegram
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Telegram.png
+    exclude-filter: *GL
     proxies:
       - Proxies
     <<: *use
 
   - name: Google
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Google.png
+    exclude-filter: *GL
     proxies:
       - Proxies
     <<: *use
 
   - name: Microsoft
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/microsoft.png
+    exclude-filter: *GL
     proxies:
       - DIRECT
       - Proxies
@@ -259,12 +270,14 @@ proxy-groups:
 
   - name: OpenAI
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/chatgpt.png
+    exclude-filter: *OPENAI
     proxies:
       - Proxies
     <<: *use
 
   - name: Apple
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Apple.png
+    exclude-filter: *GL
     proxies:
       - DIRECT
       - Proxies
@@ -272,6 +285,7 @@ proxy-groups:
 
   - name: Binance
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/binance.png
+    exclude-filter: *GL
     proxies:
       - DIRECT
       - Proxies
@@ -279,6 +293,7 @@ proxy-groups:
 
   - name: Github
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Openhub.png
+    exclude-filter: *GL
     proxies:
       - Proxies
     <<: *use
@@ -301,6 +316,7 @@ proxy-groups:
     # 广告组不需要注入订阅节点
 
   - name: 自动选择
+    exclude-filter: *GL
     <<: *use
     type: url-test
     url: 'http://www.gstatic.com/generate_204'
@@ -311,6 +327,7 @@ proxy-groups:
     lazy: true
 
   - name: 故障转移
+    exclude-filter: *GL
     <<: *use
     type: fallback
     url: 'http://www.gstatic.com/generate_204'
