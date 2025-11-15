@@ -1,5 +1,7 @@
 # mihomo (Clash Meta) 懒人配置
-# 本配置基于懒人配置（https://gist.github.com/liuran001/5ca84f7def53c70b554d3f765ff86a33）修改
+# 版本 V0.2-20151115
+# 仓库地址：https://github.com/lzcmaro/clash-config-convert
+# 感谢clash懒人配置（https://gist.github.com/liuran001/5ca84f7def53c70b554d3f765ff86a33）的贡献
 
 
 # 延迟检测 URL
@@ -70,7 +72,7 @@ openai: &OPENAI "香港|🇭🇰|HK|Hong|跳转|长期|导入|节点|流量|轮�
 # 规则订阅
 rule-providers:
   # 秋风广告拦截规则
-  AWAvenue-Ads:
+  秋风广告:
     type: http
     # domain 纯域名格式 | classical 经典型模式，包含 DOMAIN-SUFFIX 等，主要看该规则集返回的数据格式
     behavior: domain
@@ -142,7 +144,7 @@ tun:
 # dns 设置
 dns:
   enable: true
-  ipv6: false
+  ipv6: true
   use-hosts: true
   respect-rules: true
   enhanced-mode: fake-ip
@@ -165,9 +167,12 @@ dns:
 
   # 回退 DNS（当主上游失败时使用国际可用 DoH/DoT）
   fallback:
-    - 'tls://1.1.1.1:853'
-    - 'tls://8.8.8.8:853'
-    - 'https://doh.pub/dns-query'
+    # ip 方式容易被干扰、阻止
+    #- 'tls://1.1.1.1'
+    #- 'tls://8.8.8.8'
+    - 'https://one.one.one.one/dns-query' # Cloudflare DoH (走 443 端口)
+    - 'https://dns.google/dns-query'      # Google DoH (走 443 端口)
+    - 'https://doh.pub/dns-query'         # 阿里云的 DoH 备用，通常用于国内解析
 
   # 特殊域名走专用解析策略
   nameserver-policy:
@@ -239,7 +244,6 @@ proxy-groups:
     <<: *use
 
   - name: Netflix
-    hidden: true
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Netflix.png
     exclude-filter: *GL
     proxies:
@@ -248,6 +252,48 @@ proxy-groups:
 
   - name: Telegram
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Telegram.png
+    exclude-filter: *GL
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: TikTok
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Tiktok.png
+    exclude-filter: *GL
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Disney
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Disney.png
+    exclude-filter: *GL
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Steam
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Steam.png
+    exclude-filter: *GL
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: PayPal
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Paypal.png
+    exclude-filter: *GL
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: OpenAI
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/chatgpt.png
+    exclude-filter: *OPENAI
+    proxies:
+      - Proxies
+    <<: *use
+
+  - name: Github
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Openhub.png
     exclude-filter: *GL
     proxies:
       - Proxies
@@ -268,13 +314,6 @@ proxy-groups:
       - Proxies
     <<: *use
 
-  - name: OpenAI
-    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/chatgpt.png
-    exclude-filter: *OPENAI
-    proxies:
-      - Proxies
-    <<: *use
-
   - name: Apple
     icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Apple.png
     exclude-filter: *GL
@@ -291,20 +330,13 @@ proxy-groups:
       - Proxies
     <<: *use
 
-  - name: Github
-    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Openhub.png
-    exclude-filter: *GL
-    proxies:
-      - Proxies
-    <<: *use
-
   - name: Final
     type: select
-    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Golbal.png
+    icon: https://raw.githubusercontent.com/NB921/picture/refs/heads/main/Yu.png
     proxies:
       - Proxies
       - DIRECT
-    # Final组是用来兜底的，不需要注入订阅节点，默认指向Proxies组
+    # Final组是用来兜底的，不需要注入订阅节点，默认指向 "Proxies" 组
 
   - name: 广告
     type: select
@@ -319,7 +351,7 @@ proxy-groups:
     exclude-filter: *GL
     <<: *use
     type: url-test
-    url: 'http://www.gstatic.com/generate_204'
+    url: 'https://www.gstatic.com/generate_204'
     interval: 600
     timeout: 3000
     tolerance: 50
@@ -330,13 +362,16 @@ proxy-groups:
     exclude-filter: *GL
     <<: *use
     type: fallback
-    url: 'http://www.gstatic.com/generate_204'
+    url: 'https://www.gstatic.com/generate_204'
     interval: 600
 
 rules:
+  # 强制 Cloudflare/Google 加密 DNS 走代理
+  # --------------------------------------------------
+  - DOMAIN,one.one.one.one,Proxies
+  - DOMAIN,dns.google,Proxies
+  # --------------------------------------------------
   - GEOIP,private,DIRECT,no-resolve
-  - IP-CIDR,1.1.1.1/32,Final,no-resolve
-  - IP-CIDR,8.8.8.8/32,Final,no-resolve
   # 直连白名单
   - 'DOMAIN,dns.alidns.com,DIRECT'
   - 'DOMAIN,doh.pub,DIRECT'
@@ -354,7 +389,7 @@ rules:
   - 'DOMAIN,mtalk-staging.google.com,DIRECT'
   - 'DOMAIN,mtalk-dev.google.com,DIRECT'
   # 广告拦截
-  - RULE-SET,AWAvenue-Ads,广告
+  - RULE-SET,秋风广告,广告
   # 代理组分流
   - 'DOMAIN-SUFFIX,trustwallet.com,Binance'
   - 'DOMAIN-SUFFIX,bnbchain.org,Binance'
@@ -371,13 +406,18 @@ rules:
   - 'DOMAIN-SUFFIX,m.api.forter.com,Binance'
   - 'DOMAIN-SUFFIX,report.bntrace.com,Binance'
   - GEOSITE,binance,Binance
+  - GEOSITE,youtube,YouTube
+  - GEOSITE,netflix,Netflix
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,tiktok,TikTok
+  - GEOSITE,disney,Disney
+  - GEOSITE,steam,Steam
+  - GEOSITE,paypal,PayPal
+  - GEOSITE,openai,OpenAI
   - GEOSITE,apple,Apple
   - GEOSITE,apple-cn,Apple
   - GEOSITE,github,Github
-  - GEOSITE,youtube,YouTube
-  - GEOSITE,telegram,Telegram
-  - GEOSITE,microsoft,Microsoft
-  - GEOSITE,openai,OpenAI
+  - GEOSITE,microsoft,Microsoft # geosite microsoft 会包括一些其它域名，比如 github 等，这里需要放后面一些
   - GEOSITE,google,Google
   - GEOSITE,google-cn,Google # Google CN 不走代理会导致香港等地区节点 Play Store 异常
   - GEOIP,google,Google
